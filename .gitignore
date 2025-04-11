@@ -1,0 +1,103 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Compiled source #
+###################
+*.class
+*.jar
+*.war
+*.ear
+.idea/
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Logs and temporary files #
+############################
+*.log
+*.tmp
+/tmp/
+hs_err_pid*
+.DS_Store
+
+# IntelliJ IDEA related #
+#########################
+.mvn/wrapper/maven-wrapper.jar
+.gradle
+
+# Eclipse related #
+###################
+.settings/
+
+# NetBeans related #
+####################
+/nbproject/build-impl.xml
+/nbproject/private/private.xml
+
+# Maven related #
+#################
+pom.xml.tag
+pom.xml.backup
+
+# Gradle related #
+#################
+.gradle/
+settings.gradle
+gradlew
+gradlew.bat
+
+# Spring Boot DevTools restart #
+#################################
+.spring-boot-devtools.properties
+
+# Docker related #
+#################
+docker-compose.override.yml
+docker-compose.yml.backup
+
+# MailHog data #
+################
+mailhog_data/
+
+# Other #
+#########
+*.swp
+*.swo
