@@ -31,6 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+*.code-workspace
+.settings/
 
 # Compiled source #
 ###################
@@ -38,7 +40,9 @@ build/
 *.jar
 *.war
 *.ear
-.idea/
+*.logs
+*.log
+hs_err_pid*
 
 # Packages #
 ############
@@ -75,7 +79,13 @@ hs_err_pid*
 # Maven related #
 #################
 pom.xml.tag
-pom.xml.backup
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
 
 # Gradle related #
 #################
@@ -86,12 +96,13 @@ gradlew.bat
 
 # Spring Boot DevTools restart #
 #################################
-.spring-boot-devtools.properties
+spring-boot-devtools.properties
 
 # Docker related #
 #################
 docker-compose.override.yml
 docker-compose.yml.backup
+.docker/
 
 # MailHog data #
 ################
@@ -101,3 +112,69 @@ mailhog_data/
 #########
 *.swp
 *.swo
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.log
+hs_err_pid*
+
+### Spring Boot ###
+*.pid
+*.port
+application-*.properties
+!application.properties
+!application-example.properties
+
+### React/Node ###
+# dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+/web-client/coverage
+
+# production
+/build
+/web-client/build
+/web-client/dist
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+### System Files ###
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+### Logs and Databases ###
+*.log
+*.sqlite
+*.db
+*.h2.db
+*.trace.db
+
+### Kafka ###
+kafka-logs/
+zookeeper-data/
+
+### Test Reports ###
+test-output/
+reports/

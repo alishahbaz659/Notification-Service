@@ -5,6 +5,8 @@ import com.notification.notificationservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -16,5 +18,16 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
         notificationService.sendNewProductNotification(product);
         return savedProduct;
+    }
+    
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new IllegalArgumentException("Product not found with id: " + id);
+        }
+        productRepository.deleteById(id);
     }
 }

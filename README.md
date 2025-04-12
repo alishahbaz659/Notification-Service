@@ -1,69 +1,175 @@
-# Notification Service Application - Development Progress
+# Notification Service Application
 
-This README provides an overview of the development progress of the Notification Service application as of April 12, 2025.
+A modern notification system built with Spring Boot, React, and Apache Kafka that handles user management, product management, and real-time notifications.
 
-## Core Functionality Implemented
+## Features
 
-So far, we have built the foundational components for managing users, products, and sending notifications asynchronously using Apache Kafka.
+- **User Management**
+  - User registration with email
+  - Unique username and email validation
+  - Secure password handling
 
-### 1. Data Model (Entities)
+- **Product Management**
+  - Add new products with name, description, price, and stock quantity
+  - View all products in a responsive grid layout
+  - Delete products with confirmation
+  - Real-time updates
 
-We have defined the following JPA entities to represent our data:
+- **Notification System**
+  - Real-time notifications using Apache Kafka
+  - Email notifications via Spring Mail
+  - Asynchronous message processing
+  - Event-driven architecture
 
-* **`User`**: Represents a user in the system with fields for `id`, `username`, `email`, and `password`.
-* **`Product`**: Represents a product with fields for `id`, `name`, `description`, `price`, `stockQuantity`, `createdAt`, and `updatedAt`.
-* **`Notification`**: Represents a notification record with fields for `id`, `user` (many-to-one relationship with `User`), `message`, `type` (e.g., "EMAIL", "KAFKA"), `recipient`, `sentAt`, and `status` (e.g., "PENDING", "SENT", "FAILED").
+## Tech Stack
 
-### 2. Data Access Layer (Repositories)
+### Backend
+- Java 17
+- Spring Boot 3.x
+- Spring Data JPA
+- Spring Mail
+- Apache Kafka
+- MySQL Database
+- Maven
 
-For each entity, we have created a Spring Data JPA repository interface (`UserRepository`, `ProductRepository`, `NotificationRepository`) that provides methods for basic CRUD operations and custom queries.
+### Frontend
+- React 18
+- Material-UI (MUI)
+- Formik & Yup
+- Framer Motion
+- Axios
 
-### 3. Service Layer
+## Prerequisites
 
-The service layer contains the business logic of our application:
+- Java 17 or higher
+- Maven
+- Node.js and npm
+- Docker and Docker Compose
+- MySQL
 
-* **`UserService`**: Handles user-related operations like registration and retrieval.
-* **`ProductService`**: Handles product-related operations, including saving new products. Upon saving a new product, it triggers a notification.
-* **`EmailService`**: A basic service for sending simple email messages using Spring Mail and configured to use MailHog for development testing.
-* **`NotificationService`**: Responsible for orchestrating the sending of new product notifications. It retrieves all users and produces a `NotificationPayload` message to a Kafka topic for each user. It also saves a `Notification` record with a "PENDING" status.
-* **`NotificationConsumerService`**: A Kafka consumer that listens to the `new-product-notifications` topic. It consumes `NotificationPayload` messages, retrieves the corresponding user, sends an email using `EmailService`, and updates the status of the `Notification` record in the database to "SENT".
+## Setup and Installation
 
-### 4. REST API (Controllers)
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd notification-service
+```
 
-We have created the following REST controllers to expose our functionalities:
+### 2. Database Setup
+```sql
+CREATE DATABASE notification_db;
+```
 
-* **`UserController`**: Provides endpoints for user registration (`/api/users/register` - POST) and retrieving a user by username (`/api/users/{username}` - GET).
-* **`ProductController`**: Provides an endpoint for adding new products (`/api/products/add` - POST).
+Update `src/main/resources/application.properties` with your database credentials:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/notification_db
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
 
-### 5. Asynchronous Notification Handling with Apache Kafka
+### 3. Start Kafka
+```bash
+docker-compose up -d
+```
 
-We have implemented asynchronous notification sending using Apache Kafka:
+### 4. Run Backend
+```bash
+# Build and run the Spring Boot application
+./mvnw clean install
+./mvnw spring-boot:run
+```
 
-* **Kafka Setup**: A single-node Kafka broker is set up using Docker Compose.
-* **Kafka Integration**: The Spring Boot application uses the `spring-kafka` dependency to interact with the Kafka broker.
-* **Message Production**: When a new product is added, the `NotificationService` creates `NotificationPayload` objects and sends them as messages to the `new-product-notifications` Kafka topic.
-* **Message Consumption**: The `NotificationConsumerService` listens to this topic, consumes the messages, and handles the actual email sending.
-* **Message Format**: Messages sent to Kafka are serialized as JSON using Spring Kafka's `JsonSerializer`.
-* **Deserialization**: The `NotificationConsumerService` uses Spring Kafka's `JsonDeserializer` to deserialize the messages back into `NotificationPayload` objects. We configured the trusted packages for the deserializer in `application.properties`.
+### 5. Run Frontend
+```bash
+# Navigate to web client directory
+cd web-client
 
-### 6. Configuration
+# Install dependencies
+npm install
 
-* **`application.properties`**: Contains configurations for database connection (MySQL), MailHog, and Kafka broker details, including the bootstrap servers and trusted packages for JSON deserialization.
-* **`docker-compose.yml`**: Defines the Docker configuration for running a single-node Kafka broker without Zookeeper.
+# Start development server
+npm start
+```
 
-## Testing
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
 
-We have tested the user registration, product creation, and the asynchronous email notification process using Postman and MailHog. When a new product is added via the API, an email notification is successfully sent to all registered users via Kafka.
+## API Endpoints
 
-## Next Steps
+### User Management
+- `POST /api/users/register` - Register new user
+- `GET /api/users/{username}` - Get user details
 
-The following are potential next steps for the development of this application:
+### Product Management
+- `GET /api/products` - Get all products
+- `POST /api/products/add` - Add new product
+- `DELETE /api/products/{id}` - Delete product
 
-* Implement User Preferences for notification types.
-* Implement different types of notifications (e.g., order confirmations, shipping updates).
-* Explore SMS notification integration.
-* Add more robust error handling and logging.
-* Implement API endpoints for retrieving notification history.
-* Consider adding security to the API endpoints.
+## Architecture
 
-This README provides a snapshot of the progress made so far. The application has a basic structure for handling users, products, and asynchronous email notifications using Kafka.
+The application follows an event-driven architecture:
+
+1. **Product Added**
+   - Backend creates a notification event when a new product is added
+
+2. **Kafka Producer**
+   - Event is published to Kafka topic for each registered user
+
+3. **Kafka Consumer**
+   - Processes events asynchronously
+
+4. **Email Delivery**
+   - Notifications are sent via Spring Mail
+
+## Development
+
+### Backend Development
+```bash
+# Run tests
+./mvnw test
+
+# Run with specific profile
+./mvnw spring-boot:run -Dspring.profiles.active=dev
+```
+
+### Frontend Development
+```bash
+# Run tests
+cd web-client
+npm test
+
+# Build for production
+npm run build
+```
+
+## Configuration
+
+### Email Configuration
+Update `application.properties` for email settings:
+```properties
+spring.mail.host=your-smtp-host
+spring.mail.port=587
+spring.mail.username=your-email
+spring.mail.password=your-password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+```
+
+### Kafka Configuration
+```properties
+spring.kafka.bootstrap-servers=localhost:9092
+spring.kafka.consumer.group-id=notification-group
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
