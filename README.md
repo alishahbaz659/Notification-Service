@@ -21,6 +21,15 @@ A modern notification system built with Spring Boot, React, and Apache Kafka tha
   - Asynchronous message processing
   - Event-driven architecture
 
+<div align="center">
+  
+## 📺 Demo Video
+[![Notification Service Demo](https://img.youtube.com/vi/1_U_G_qlclA/0.jpg)](https://youtu.be/1_U_G_qlclA?si=xvVdyd1vkubYBR8N)
+  
+**▶️ Click the image above to watch the demo video**
+
+</div>
+
 ## Tech Stack
 
 ### Backend
